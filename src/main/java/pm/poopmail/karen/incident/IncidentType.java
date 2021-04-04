@@ -7,9 +7,10 @@ package pm.poopmail.karen.incident;
  */
 public enum IncidentType {
 
-    PANIC(10038562),
+    PANIC(0XFF0000),
     ERROR(15158332),
-    INFO(1752220),
+    WARNING(16776960),
+    INFO(3447003),
     SUCCESS(3066993),
     DEBUG(10181046);
 

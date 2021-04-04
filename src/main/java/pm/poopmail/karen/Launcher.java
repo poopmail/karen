@@ -42,7 +42,7 @@ public class Launcher {
             // Do debug stuff
             final JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("service", "Test");
-            jsonObject.addProperty("type", "DEBUG");
+            jsonObject.addProperty("type", "INFO");
             jsonObject.addProperty("topic", "This is the topic");
             jsonObject.addProperty("description", "THis is the desc");
             incidentProcessor.process(jsonObject);
