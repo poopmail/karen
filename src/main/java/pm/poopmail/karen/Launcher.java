@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.pubsub.RedisPubSubAdapter;
+import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
 import java.io.IOException;
 import pm.poopmail.karen.config.Config;
@@ -52,7 +53,8 @@ public class Launcher {
         final RedisClient redisClient = RedisClient.create(redisUri);
         final RedisPubSubAsyncCommands<String, String> redisSub = redisClient.connectPubSub().async();
         redisSub.subscribe(redisKey);
-        redisSub.getStatefulConnection().addListener(new RedisPubSubAdapter<>() {
+        final StatefulRedisPubSubConnection<String, String> statefulConnection = redisSub.getStatefulConnection();
+        statefulConnection.addListener(new RedisPubSubAdapter<>() {
             @Override
             public void message(final String channel, final String message) {
                 // Check if this is the correct channel
@@ -65,6 +67,9 @@ public class Launcher {
                 incidentProcessor.process(jsonObject);
             }
         });
+
+        // Cleanup
+        Runtime.getRuntime().addShutdownHook(new Thread(statefulConnection::close));
     }
 
 }
