@@ -31,7 +31,7 @@ public class DiscordReceiver extends HttpReceiver {
                 .setThumbnailUrl(this.serviceIconMap.getOrDefault(incident.getServiceName(), null))
                 .setTitle(new WebhookEmbed.EmbedTitle(incident.getType() + " @ " + incident.getServiceName(), null))
                 .setDescription("```\n" + incident.getDescription() + "\n```")
-                .addField(new WebhookEmbed.EmbedField(false, "Topic", incident.getTopic()))
+                .addField(new WebhookEmbed.EmbedField(false, "Topic", incident.getTopic().isEmpty() ? "/" : incident.getTopic()))
                 .setFooter(new WebhookEmbed.EmbedFooter("Poopmail Karen", null))
                 .setTimestamp(Instant.now())
                 .setColor(incident.getType().getColor())
