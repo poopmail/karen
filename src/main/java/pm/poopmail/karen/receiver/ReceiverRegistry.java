@@ -1,10 +1,9 @@
 package pm.poopmail.karen.receiver;
 
 import com.github.jezza.TomlTable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 import pm.poopmail.karen.exception.ConfigurationException;
 
 /**
@@ -14,10 +13,10 @@ import pm.poopmail.karen.exception.ConfigurationException;
  */
 public class ReceiverRegistry {
 
-    private static final Map<String, Class<? extends Receiver>> receiverMap = new HashMap<>() {
+    private static final Map<String, Supplier<Receiver>> receiverMap = new HashMap<>() {
         {
-            this.put("http", HttpReceiver.class);
-            this.put("discord", DiscordReceiver.class);
+            this.put("http", HttpReceiver::new);
+            this.put("discord", DiscordReceiver::new);
         }
     };
 
@@ -43,16 +42,8 @@ public class ReceiverRegistry {
             throw new ConfigurationException("Unknown receiver type: " + type);
         }
 
-        final Receiver receiver;
-        try {
-            final Class<? extends Receiver> receiverClass = receiverMap.get(type);
-            final Constructor<? extends Receiver> constructor = receiverClass.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            receiver = constructor.newInstance();
-        } catch (final InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
+        // Retrieve receiver
+        final Receiver receiver = receiverMap.get(type).get();
         receiver.loadFromConfig(tomlTable);
         return receiver;
     }
