@@ -26,7 +26,16 @@ public class IncomingIncidentProcessor {
     public void process(final JsonObject jsonObject) {
         // Parse to incident object
         final Incident incident = this.gson.fromJson(jsonObject, Incident.class);
+        // Process
+        this.process(incident);
+    }
 
+    /**
+     * Processes an incident
+     *
+     * @param incident The incident
+     */
+    public void process(final Incident incident) {
         // Loop through configured receivers
         this.config.configuredReceivers.forEach(receiver -> {
             if (receiver.isOperational() && receiver.willTrigger(incident.getType())) {

@@ -1,6 +1,9 @@
 package pm.poopmail.karen.receiver;
 
 import com.github.jezza.TomlTable;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -35,6 +38,7 @@ public class HttpReceiver extends Receiver {
         connection.setRequestMethod(this.method);
         this.headerMap.forEach(connection::setRequestProperty);
 
+        connection.setDoInput(true);
         if (this.rawPayload != null) {
             // Send payload
             connection.setDoOutput(true);
@@ -43,8 +47,22 @@ public class HttpReceiver extends Receiver {
             outputStream.flush();
         }
 
+        InputStream inputStream;
+        try {
+            inputStream = connection.getInputStream();
+        } catch (final Exception e) {
+            inputStream = connection.getErrorStream();
+        }
+
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String s;
+        while ((s = bufferedReader.readLine()) != null) {
+            System.out.println(s);
+        }
+
         // Wont work without this for some reason
-        connection.getResponseCode();
+        final int responseCode = connection.getResponseCode();
+        System.out.println("response: " + responseCode);
     }
 
     @Override

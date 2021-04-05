@@ -11,6 +11,7 @@ import java.util.Base64;
 import pm.poopmail.karen.config.Config;
 import pm.poopmail.karen.exception.ConfigurationException;
 import pm.poopmail.karen.incident.IncomingIncidentProcessor;
+import pm.poopmail.karen.redis.RedisEventSubscriber;
 
 /**
  * Application launcher
@@ -52,6 +53,9 @@ public class Launcher {
 
         // Init redis
         final RedisClient redisClient = RedisClient.create(redisUri);
+        final RedisEventSubscriber redisEventSubscriber = new RedisEventSubscriber(incidentProcessor);
+        redisClient.getResources().eventBus().get().subscribe(redisEventSubscriber);
+        redisClient.addListener(redisEventSubscriber);
         final RedisPubSubAsyncCommands<String, String> redisSub = redisClient.connectPubSub().async();
         redisSub.subscribe(redisKey);
         final StatefulRedisPubSubConnection<String, String> statefulConnection = redisSub.getStatefulConnection();
@@ -70,7 +74,7 @@ public class Launcher {
         });
 
         // Cleanup
-        Runtime.getRuntime().addShutdownHook(new Thread(statefulConnection::close));
+        Runtime.getRuntime().addShutdownHook(new Thread(redisClient::shutdown));
     }
 
 }

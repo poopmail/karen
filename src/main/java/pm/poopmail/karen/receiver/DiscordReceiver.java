@@ -30,8 +30,9 @@ public class DiscordReceiver extends HttpReceiver {
                 + "\"embeds\": [" + new WebhookEmbedBuilder()
                 .setThumbnailUrl(this.serviceIconMap.getOrDefault(incident.getServiceName(), null))
                 .setTitle(new WebhookEmbed.EmbedTitle(incident.getType() + " @ " + incident.getServiceName(), null))
-                .setDescription("```\n" + incident.getDescription() + "\n```")
-                .addField(new WebhookEmbed.EmbedField(false, "Topic", incident.getTopic().isEmpty() ? "/" : incident.getTopic()))
+                .setDescription("```\n" + this.cut(incident.getDescription(), 1992) + "\n```")
+                .addField(new WebhookEmbed.EmbedField(false, "Topic", incident.getTopic().isEmpty() ? "/"
+                        : this.cut(incident.getTopic(), 512)))
                 .setFooter(new WebhookEmbed.EmbedFooter("Poopmail Karen", null))
                 .setTimestamp(Instant.now())
                 .setColor(incident.getType().getColor())
@@ -39,6 +40,10 @@ public class DiscordReceiver extends HttpReceiver {
                 .toJSONString() + "]}";
         // Send report
         super.report(incident);
+    }
+
+    private String cut(final String s, final int maxLen) {
+        return s.length() > maxLen ? s.substring(0, maxLen - 3) + "..." : s;
     }
 
     @Override
