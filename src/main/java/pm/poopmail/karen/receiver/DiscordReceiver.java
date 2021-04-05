@@ -43,6 +43,8 @@ public class DiscordReceiver extends HttpReceiver {
 
     @Override
     public void loadFromConfig(final TomlTable tomlTable) throws ConfigurationException {
+        this.loadTrigger(tomlTable);
+
         this.urlStr = (String) tomlTable.get("url");
         this.method = "POST";
         this.headerMap = new HashMap<>() {

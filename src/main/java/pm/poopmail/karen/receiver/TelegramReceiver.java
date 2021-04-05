@@ -28,6 +28,8 @@ public class TelegramReceiver extends HttpReceiver {
 
     @Override
     public void loadFromConfig(final TomlTable tomlTable) throws ConfigurationException {
+        this.loadTrigger(tomlTable);
+
         final String botToken = (String) tomlTable.get("bottoken");
         final String chatId = (String) tomlTable.get("chatid");
         this.urlStr = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId;

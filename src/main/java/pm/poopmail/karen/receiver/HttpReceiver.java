@@ -15,7 +15,7 @@ import pm.poopmail.karen.incident.Incident;
  *
  * @author Maximilian Dorn (Cerus)
  */
-public class HttpReceiver implements Receiver {
+public class HttpReceiver extends Receiver {
 
     protected String urlStr;
     protected String method;
@@ -49,6 +49,8 @@ public class HttpReceiver implements Receiver {
 
     @Override
     public void loadFromConfig(final TomlTable tomlTable) throws ConfigurationException {
+        super.loadFromConfig(tomlTable);
+
         this.urlStr = (String) tomlTable.get("url");
         this.method = (String) tomlTable.get("method");
         this.headerMap = ((TomlTable) tomlTable.getOrDefault("header", new TomlTable()))

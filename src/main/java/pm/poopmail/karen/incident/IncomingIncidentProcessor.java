@@ -29,7 +29,7 @@ public class IncomingIncidentProcessor {
 
         // Loop through configured receivers
         this.config.configuredReceivers.forEach(receiver -> {
-            if (receiver.isOperational()) {
+            if (receiver.isOperational() && receiver.willTrigger(incident.getType())) {
                 // Report the incident
                 try {
                     receiver.report(incident);
