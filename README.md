@@ -21,7 +21,7 @@ Default config:
     url = "https://discord.com/api/webhooks/123/abc"
     content = "@everyone" # Optional
         [reports.example2.icons] # Optional
-        "toilet" = "https://yt3.ggpht.com/a/AATXAJzg_11V_V_jb1dvFuDrI7RWadpt6DmUeFSyDQ=s900-c-k-c0xffffffff-no-rj-mo"
+        "toilet" = "https://cdn.bigbathroomshop.co.uk/media/catalog/product/cache/07469e52453ec3e9e92a88c7a63b12d8/h/l/hlb031w_ls_b_new_1000.jpg"
 
     [reports.example3]
     type = "telegram"
