@@ -17,6 +17,7 @@ public class ReceiverRegistry {
         {
             this.put("http", HttpReceiver::new);
             this.put("discord", DiscordReceiver::new);
+            this.put("telegram", TelegramReceiver::new);
         }
     };
 

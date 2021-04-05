@@ -7,6 +7,7 @@ import io.lettuce.core.pubsub.RedisPubSubAdapter;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
 import java.io.IOException;
+import java.util.Base64;
 import pm.poopmail.karen.config.Config;
 import pm.poopmail.karen.exception.ConfigurationException;
 import pm.poopmail.karen.incident.IncomingIncidentProcessor;
@@ -63,7 +64,7 @@ public class Launcher {
                 }
 
                 // Parse json and forward to incident processor
-                final JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+                final JsonObject jsonObject = JsonParser.parseString(new String(Base64.getDecoder().decode(message))).getAsJsonObject();
                 incidentProcessor.process(jsonObject);
             }
         });

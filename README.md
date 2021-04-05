@@ -22,6 +22,11 @@ Default config:
     content = "@everyone" # Optional
         [reports.example2.icons] # Optional
         "toilet" = "https://yt3.ggpht.com/a/AATXAJzg_11V_V_jb1dvFuDrI7RWadpt6DmUeFSyDQ=s900-c-k-c0xffffffff-no-rj-mo"
+
+    [reports.example3]
+    type = "telegram"
+    bottoken = "1234567:ABCdefgHIjklMNOpQrSTUVwXYZ"
+    chatid = "1234567"
 ```
 
 ### Credits and thirdpary licenses
